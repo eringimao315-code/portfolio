@@ -1,25 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PORTFOLIO | WORKS</title>
+  <link rel="stylesheet" href="style.css">
+</head>
 <body>
-
-  <header>
-    <h1>PORTFOLIO</h1>
+  <header class="hero" id="top">
+    <a class="brand" href="#top">PORTFOLIO</a>
+    <div class="hero-content"><p class="hero-eyebrow">MY CREATIVE PORTFOLIO</p><h1>Welcome</h1></div>
+    <a class="scroll-link" href="#seminar-project">SCROLL <span aria-hidden="true">↓</span></a>
+    <svg class="hero-wave" viewBox="0 0 1440 100" preserveAspectRatio="none" aria-hidden="true"><path d="M0 60 C180 25 300 70 500 48 S850 25 1030 42 S1280 22 1440 50 L1440 100 L0 100Z" fill="white"/></svg>
   </header>
-
   <main>
-    <section class="works">
-      <h2>WORKS</h2>
-
-      <div class="slider">
-
-       <img src="logo/aki.jpg" alt="秋のタイポグラフィ">
-       <img src="logo/gw.jpg" alt="ゴールデンウィークのタイポグラフィ">
-
-       <img src="logo/trein.jpg" alt="宮津線100周年ロゴ">
-
-       <img src="logo/umi_taipo.jpg" alt="海のタイポグラフィ">
-        </a>
-
+    <section class="works project-works" id="seminar-project" aria-labelledby="project-heading">
+      <div class="section-heading">
+        <p class="section-label">SELECTED WORKS / 01</p>
+        <h2 id="project-heading" class="project-category-heading">project<span class="heading-dot">.</span></h2>
       </div>
+      <p class="slider-hint" id="project-hint">横にスワイプ · 作品をタップで詳しく見る</p>
+      <div class="carousel single-project" data-carousel>
+        <button class="slider-arrow previous" type="button" aria-label="前のプロジェクトを表示" aria-controls="project-slider" hidden>←</button>
+        <div class="slider" id="project-slider" tabindex="0" aria-label="ゼミプロジェクトの作品一覧" aria-describedby="project-hint">
+          <a class="work-card" href="cheetah-purin.html">
+            <img src="project/suika.jpg" alt="チータープリン：スイカと海を組み合わせた広告ビジュアル" width="595" height="842" loading="lazy">
+            <span class="work-number">01 / ゼミプロジェクト</span>
+            <h3>チータープリン</h3>
+            <span class="card-link">プロジェクトを見る ↗</span>
+          </a>
+        </div>
+        <button class="slider-arrow next" type="button" aria-label="次のプロジェクトを表示" aria-controls="project-slider" hidden>→</button>
+      </div>
+      <div class="pagination" aria-label="表示するプロジェクトを選択" hidden></div>
+      <p class="slide-status sr-only" aria-live="polite" aria-atomic="true"></p>
     </section>
-  </main>
+    <section class="works" id="works" aria-labelledby="works-heading">
+      <div class="section-heading"><p class="section-label">SELECTED WORKS / 02</p><h2 id="works-heading">logo<span class="heading-dot">.</span></h2></div>
+      <p class="slider-hint" id="slider-hint">横にスワイプ · 作品をタップで詳しく見る</p>
+      <div class="carousel" data-carousel>
+        <button class="slider-arrow previous" type="button" aria-label="前の作品を表示" aria-controls="works-slider" hidden>←</button>
+        <div class="slider" id="works-slider" tabindex="0" aria-label="logoの作品一覧" aria-describedby="slider-hint">
+        <a class="work-card" href="logo-details.html#work-aki">
+          <img src="logo/aki.jpg" alt="秋のタイポグラフィ">
+          <span class="work-number">01</span><h3>秋のタイポグラフィ</h3>
+          <span class="card-link">作品を見る ↗</span>
+        </a>
+        <a class="work-card" href="logo-details.html#work-gw">
+          <img src="logo/gw.jpg" alt="ゴールデンウィークのタイポグラフィ">
+          <span class="work-number">02</span><h3>ゴールデンウィークのタイポグラフィ</h3>
+          <span class="card-link">作品を見る ↗</span>
+        </a>
+        <a class="work-card" href="logo-details.html#work-trein">
+          <img src="logo/trein.jpg" alt="宮津線100周年ロゴ">
+          <span class="work-number">03</span><h3>宮津線100周年ロゴ</h3>
+          <span class="card-link">作品を見る ↗</span>
+        </a>
+        <a class="work-card" href="logo-details.html#work-umi">
+          <img src="logo/umi_taipo.jpg" alt="海のタイポグラフィ">
+          <span class="work-number">04</span><h3>海のタイポグラフィ</h3>
+          <span class="card-link">作品を見る ↗</span>
+        </a>
+        </div>
+        <button class="slider-arrow next" type="button" aria-label="次の作品を表示" aria-controls="works-slider" hidden>→</button>
+      </div>
+      <div class="pagination" aria-label="表示する作品を選択" hidden></div>
+      <p class="slide-status sr-only" aria-live="polite" aria-atomic="true"></p>
+    </section>
+    <!-- プロジェクトが増えたらカードを追加し、single-projectクラスを外してください。 -->
 
+  </main>
+  <footer><svg class="footer-wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0 35 C240 0 380 48 660 25 S1120 12 1440 32 L1440 80 L0 80Z" fill="#080808"/></svg><a href="#top">PORTFOLIO ↑</a></footer>
+  <script src="script.js"></script>
 </body>
+</html>
