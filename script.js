@@ -44,7 +44,15 @@ document.querySelectorAll('[data-carousel]').forEach((carousel) => {
     }
   });
   slider.addEventListener('scroll', () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(update); }, { passive: true });
-  new ResizeObserver(() => { goTo(current); update(); }).observe(slider);
+  new ResizeObserver(() => {
+    if (window.matchMedia('(max-width: 600px)').matches) {
+      // 回転や画面幅の変更ではアニメーションせず、選択中の作品に揃えます。
+      slider.scrollTo({ left: position(cards[current]), behavior: 'instant' });
+    } else {
+      goTo(current);
+    }
+    update();
+  }).observe(slider);
   previous.hidden = next.hidden = cards.length < 2;
   pagination.hidden = false;
   update();

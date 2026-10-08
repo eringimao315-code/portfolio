@@ -138,3 +138,18 @@ footer a { font-size: 11px; letter-spacing: .15em; text-decoration: none; }
 @media (max-width: 420px) {
   .housyosakuya-grid { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* スマホの作品一覧は1枚単位。PCのカード幅や末尾余白は変更しません。 */
+@media (max-width: 600px) {
+  .works { padding-inline: 44px; }
+  .works .slider { --card-width: 100%; scroll-padding-inline: 4px; }
+  .works .slider::after { display: none; }
+  .works .work-card { flex: 0 0 100%; scroll-snap-stop: always; }
+  .works .work-card img {
+    width: 100%; height: min(72vw, 44svh, 300px); aspect-ratio: auto;
+    object-fit: contain; object-position: center;
+  }
+  .works .work-card h3 { overflow-wrap: anywhere; }
+  .works .pagination { gap: 0; width: 100%; }
+  .works .pagination button { flex: 1 1 0; min-width: 0; max-width: 44px; padding: 0; }
+}
