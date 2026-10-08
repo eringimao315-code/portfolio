@@ -180,3 +180,14 @@ footer a { font-size: 11px; letter-spacing: .15em; text-decoration: none; }
   .previous { left: -39px; } .next { right: -39px; }
   .pagination { margin-top: 18px; }
 }
+
+/* トップページのLOGO一覧だけ正方形。カード幅や他カテゴリーには影響しません。 */
+#works .work-card img {
+  width: 100%; height: auto; aspect-ratio: 1 / 1;
+  object-fit: contain; object-position: center;
+  background-color: #f7f7f5;
+}
+#works .housyosakuya-card img,
+#works .character-card img[src="logo/kokkosakuya_futi.png"] {
+  background-color: #171419;
+}
