@@ -1,4 +1,4 @@
-// 各カテゴリーのスライダーを独立して初期化します。
+// スマホは従来の1枚表示、PCは複製カードで継ぎ目なくループします。
 document.querySelectorAll('[data-carousel]').forEach((carousel) => {
   const slider = carousel.querySelector('.slider');
   const cards = [...slider.querySelectorAll('.work-card')];
@@ -8,8 +8,11 @@ document.querySelectorAll('[data-carousel]').forEach((carousel) => {
   const pagination = section.querySelector('.pagination');
   const status = section.querySelector('.slide-status');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  let current = 0;
-  let frame;
+  const desktop = window.matchMedia('(min-width: 768px)');
+  const copyCount = Math.min(3, cards.length);
+  let current = 0, physical = 0, loop = false, moving = false, frame, settleTimer;
+  let rendered = cards;
+  const modulo = (index) => (index + cards.length) % cards.length;
   const dots = cards.map((card, index) => {
     const button = document.createElement('button');
     button.type = 'button';
@@ -20,45 +23,94 @@ document.querySelectorAll('[data-carousel]').forEach((carousel) => {
     return button;
   });
   function position(card) {
-    const cardRect = card.getBoundingClientRect();
-    const sliderRect = slider.getBoundingClientRect();
-    if (window.matchMedia('(min-width: 601px)').matches && !carousel.classList.contains('single-project')) {
-      return cardRect.left + cardRect.width / 2 - sliderRect.left - sliderRect.width / 2 + slider.scrollLeft;
-    }
-    return cardRect.left - sliderRect.left + slider.scrollLeft - parseFloat(getComputedStyle(slider).paddingLeft);
-  }
-  function goTo(index) {
-    slider.scrollTo({ left: position(cards[Math.max(0, Math.min(index, cards.length - 1))]), behavior: reducedMotion.matches ? 'instant' : 'smooth' });
+    return card.getBoundingClientRect().left - slider.getBoundingClientRect().left + slider.scrollLeft - parseFloat(getComputedStyle(slider).paddingLeft);
   }
   function update() {
     const image = cards[0].querySelector('img');
     previous.style.top = next.style.top = `${image.getBoundingClientRect().height / 2 + 4}px`;
-    current = cards.reduce((closest, card, index) => Math.abs(position(card) - slider.scrollLeft) < Math.abs(position(cards[closest]) - slider.scrollLeft) ? index : closest, 0);
+    const nearest = rendered.reduce((closest, card, index) => Math.abs(position(card) - slider.scrollLeft) < Math.abs(position(rendered[closest]) - slider.scrollLeft) ? index : closest, 0);
+    current = loop ? modulo(nearest - copyCount) : nearest;
     dots.forEach((dot, index) => dot.setAttribute('aria-current', String(index === current)));
-    previous.disabled = current === 0;
-    next.disabled = current === cards.length - 1;
+    previous.disabled = !loop && current === 0;
+    next.disabled = !loop && current === cards.length - 1;
     const text = `${current + 1} / ${cards.length}：${cards[current].querySelector('h3').textContent}`;
     if (status.textContent !== text) status.textContent = text;
   }
-  previous.addEventListener('click', () => goTo(current - 1));
-  next.addEventListener('click', () => goTo(current + 1));
+  function settle() {
+    clearTimeout(settleTimer);
+    update();
+    if (loop) {
+      physical = copyCount + current;
+      // 同じ画像の本体に即座に戻し、端からも次の1枚へ進めるようにします。
+      if (Math.abs(slider.scrollLeft - position(rendered[physical])) > 1) {
+        slider.scrollTo({ left: position(rendered[physical]), behavior: 'instant' });
+      }
+    }
+    moving = false;
+  }
+  function scrollToPhysical(index) {
+    physical = index;
+    moving = loop && !reducedMotion.matches;
+    slider.scrollTo({ left: position(rendered[index]), behavior: reducedMotion.matches ? 'instant' : 'smooth' });
+    clearTimeout(settleTimer);
+    settleTimer = setTimeout(settle, 200);
+  }
+  function goTo(index) {
+    const target = Math.max(0, Math.min(index, cards.length - 1));
+    scrollToPhysical(loop ? copyCount + target : target);
+  }
+  function move(direction) {
+    if (loop) {
+      if (moving) return;
+      scrollToPhysical(copyCount + current + direction);
+    } else {
+      goTo(current + direction);
+    }
+  }
+  function clone(card) {
+    const copy = card.cloneNode(true);
+    copy.dataset.loopClone = '';
+    copy.setAttribute('aria-hidden', 'true');
+    copy.tabIndex = -1;
+    return copy;
+  }
+  function configure() {
+    clearTimeout(settleTimer);
+    moving = false;
+    slider.querySelectorAll('[data-loop-clone]').forEach((copy) => copy.remove());
+    loop = desktop.matches && cards.length > 1;
+    if (loop) {
+      const before = document.createDocumentFragment();
+      cards.slice(-copyCount).forEach((card) => before.append(clone(card)));
+      slider.prepend(before);
+      cards.slice(0, copyCount).forEach((card) => slider.append(clone(card)));
+    }
+    rendered = [...slider.querySelectorAll('.work-card')];
+    physical = loop ? copyCount + current : current;
+    slider.scrollTo({ left: position(rendered[physical]), behavior: 'instant' });
+    update();
+  }
+  previous.addEventListener('click', () => move(-1));
+  next.addEventListener('click', () => move(1));
   slider.addEventListener('keydown', (event) => {
     if (event.target !== slider) return;
     if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-      event.preventDefault(); goTo(current + (event.key === 'ArrowLeft' ? -1 : 1));
+      event.preventDefault(); move(event.key === 'ArrowLeft' ? -1 : 1);
     }
   });
-  slider.addEventListener('scroll', () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(update); }, { passive: true });
+  slider.addEventListener('scroll', () => {
+    cancelAnimationFrame(frame); frame = requestAnimationFrame(update);
+    clearTimeout(settleTimer); settleTimer = setTimeout(settle, 160);
+  }, { passive: true });
+  slider.addEventListener('scrollend', settle);
+  desktop.addEventListener('change', configure);
   new ResizeObserver(() => {
-    if (window.matchMedia('(max-width: 600px)').matches) {
-      // 回転や画面幅の変更ではアニメーションせず、選択中の作品に揃えます。
-      slider.scrollTo({ left: position(cards[current]), behavior: 'instant' });
-    } else {
-      goTo(current);
-    }
+    moving = false;
+    physical = loop ? copyCount + current : current;
+    slider.scrollTo({ left: position(rendered[physical]), behavior: 'instant' });
     update();
   }).observe(slider);
   previous.hidden = next.hidden = cards.length < 2;
   pagination.hidden = false;
-  update();
+  configure();
 });

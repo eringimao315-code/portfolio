@@ -140,7 +140,7 @@ footer a { font-size: 11px; letter-spacing: .15em; text-decoration: none; }
 }
 
 /* スマホの作品一覧は1枚単位。PCのカード幅や末尾余白は変更しません。 */
-@media (max-width: 600px) {
+@media (max-width: 767px) {
   .works { padding-inline: 44px; }
   .works .slider { --card-width: 100%; scroll-padding-inline: 4px; }
   .works .slider::after { display: none; }
@@ -154,25 +154,8 @@ footer a { font-size: 11px; letter-spacing: .15em; text-decoration: none; }
   .works .pagination button { flex: 1 1 0; min-width: 0; max-width: 44px; padding: 0; }
 }
 
-/* PCのみ：カードの従来幅を保ち、中央の作品と左右の一部を見せます。 */
-@media (min-width: 601px) {
-  .carousel:not(.single-project) { container-type: inline-size; }
-  .carousel:not(.single-project) .slider {
-    --desktop-card: calc((100cqw - 36px) / 2);
-    --side-space: calc((64cqw - 8px - var(--desktop-card)) / 2);
-    width: 64%; margin-inline: auto;
-  }
-  .carousel:not(.single-project) .work-card {
-    flex-basis: var(--desktop-card); scroll-snap-align: center;
-  }
-  .carousel:not(.single-project) .slider::before,
-  .carousel:not(.single-project) .slider::after {
-    content: ""; flex: 0 0 calc(var(--side-space) - var(--gap));
-  }
-}
-
 /* PCのみ：画像枠とテキスト行を揃え、カードの縦幅を統一します。 */
-@media (min-width: 601px) {
+@media (min-width: 768px) {
   .works .work-card { display: flex; flex-direction: column; }
   .works .work-card img {
     height: clamp(280px, 38vw, 480px); aspect-ratio: auto;
@@ -181,4 +164,19 @@ footer a { font-size: 11px; letter-spacing: .15em; text-decoration: none; }
   .works .work-number { min-height: 17px; line-height: 17px; flex-shrink: 0; }
   .works .work-card h3 { min-height: 44px; line-height: 22px; margin: 6px 0; overflow-wrap: anywhere; }
   .works .card-link { display: block; min-height: 34px; line-height: 17px; margin-top: auto; }
+}
+
+@media (min-width: 768px) {
+  .carousel:not(.single-project) .slider { --card-width: calc((100% - var(--gap)) / 2); scroll-padding-inline: 4px; }
+  .carousel:not(.single-project) .slider::after { display: none; }
+  .carousel:not(.single-project) .work-card { scroll-snap-align: start; }
+}
+@media (min-width: 1200px) {
+  .carousel:not(.single-project) .slider { --card-width: calc((100% - 2 * var(--gap)) / 3); }
+}
+/* 601〜767pxでも矢印はスマホと同じ位置に配置します。 */
+@media (min-width: 601px) and (max-width: 767px) {
+  .slider-arrow { width: 36px; height: 44px; border: 0; font-size: 20px; }
+  .previous { left: -39px; } .next { right: -39px; }
+  .pagination { margin-top: 18px; }
 }
