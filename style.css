@@ -107,3 +107,34 @@ footer a { font-size: 11px; letter-spacing: .15em; text-decoration: none; }
 }
 @media (max-width: 420px) { .project-gallery { grid-template-columns: minmax(0, 1fr); gap: 32px; } }
 @media (prefers-reduced-motion: reduce) { .project-artwork img { transition: none; } }
+
+/* 2026年のキャラクターロゴ。既存カードのサイズ・ホバーを引き継ぎます。 */
+.character-card img { padding: clamp(12px, 3vw, 28px); }
+.character-detail { align-items: start; }
+.logo-variations { display: grid; gap: 24px; min-width: 0; }
+.logo-variation { margin: 0; }
+.logo-stage { display: grid; place-items: center; background: #f7f7f5; padding: clamp(16px, 3vw, 32px); border-radius: 4px; }
+.logo-stage-dark { background: #171419; }
+.logo-stage img { display: block; width: 100%; max-width: 380px; height: auto; }
+.logo-variation figcaption { margin-top: 8px; font-size: 11px; color: #777; }
+.logo-metadata { margin: 0 0 24px; font-size: 12px; }
+.logo-metadata dt { color: #777; margin-top: 14px; }
+.logo-metadata dd { margin: 4px 0 0; overflow-wrap: anywhere; }
+.creator-x-link { overflow-wrap: anywhere; }
+
+/* 白い縁取りが見えるように、黒狐 朔夜の代表画像を暗い背景にします。 */
+.character-card img[src="logo/kokkosakuya_futi.png"] { background: #171419; }
+
+/* 個別ロゴページの作品名は、既存の詳細見出しと同じサイズ。 */
+.work-detail .logo-detail-title { font-size: clamp(22px, 3vw, 30px); line-height: 1.5; margin: 12px 0 24px; letter-spacing: normal; overflow-wrap: anywhere; }
+
+/* 鳳翔朔夜だけに適用し、既存ロゴのレイアウトは維持します。 */
+.housyosakuya-card img { background: #171419; }
+.housyosakuya-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px 20px; margin-top: 28px; }
+.housyosakuya-grid .logo-stage { padding: 16px; }
+@media (max-width: 800px) {
+  .housyosakuya-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 420px) {
+  .housyosakuya-grid { grid-template-columns: minmax(0, 1fr); }
+}
