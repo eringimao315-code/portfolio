@@ -153,3 +153,20 @@ footer a { font-size: 11px; letter-spacing: .15em; text-decoration: none; }
   .works .pagination { gap: 0; width: 100%; }
   .works .pagination button { flex: 1 1 0; min-width: 0; max-width: 44px; padding: 0; }
 }
+
+/* PCのみ：カードの従来幅を保ち、中央の作品と左右の一部を見せます。 */
+@media (min-width: 601px) {
+  .carousel:not(.single-project) { container-type: inline-size; }
+  .carousel:not(.single-project) .slider {
+    --desktop-card: calc((100cqw - 36px) / 2);
+    --side-space: calc((64cqw - 8px - var(--desktop-card)) / 2);
+    width: 64%; margin-inline: auto;
+  }
+  .carousel:not(.single-project) .work-card {
+    flex-basis: var(--desktop-card); scroll-snap-align: center;
+  }
+  .carousel:not(.single-project) .slider::before,
+  .carousel:not(.single-project) .slider::after {
+    content: ""; flex: 0 0 calc(var(--side-space) - var(--gap));
+  }
+}

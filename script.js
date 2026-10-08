@@ -20,7 +20,12 @@ document.querySelectorAll('[data-carousel]').forEach((carousel) => {
     return button;
   });
   function position(card) {
-    return card.getBoundingClientRect().left - slider.getBoundingClientRect().left + slider.scrollLeft - parseFloat(getComputedStyle(slider).paddingLeft);
+    const cardRect = card.getBoundingClientRect();
+    const sliderRect = slider.getBoundingClientRect();
+    if (window.matchMedia('(min-width: 601px)').matches && !carousel.classList.contains('single-project')) {
+      return cardRect.left + cardRect.width / 2 - sliderRect.left - sliderRect.width / 2 + slider.scrollLeft;
+    }
+    return cardRect.left - sliderRect.left + slider.scrollLeft - parseFloat(getComputedStyle(slider).paddingLeft);
   }
   function goTo(index) {
     slider.scrollTo({ left: position(cards[Math.max(0, Math.min(index, cards.length - 1))]), behavior: reducedMotion.matches ? 'instant' : 'smooth' });
