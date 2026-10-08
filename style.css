@@ -170,3 +170,15 @@ footer a { font-size: 11px; letter-spacing: .15em; text-decoration: none; }
     content: ""; flex: 0 0 calc(var(--side-space) - var(--gap));
   }
 }
+
+/* PCのみ：画像枠とテキスト行を揃え、カードの縦幅を統一します。 */
+@media (min-width: 601px) {
+  .works .work-card { display: flex; flex-direction: column; }
+  .works .work-card img {
+    height: clamp(280px, 38vw, 480px); aspect-ratio: auto;
+    object-fit: contain; object-position: center; flex-shrink: 0;
+  }
+  .works .work-number { min-height: 17px; line-height: 17px; flex-shrink: 0; }
+  .works .work-card h3 { min-height: 44px; line-height: 22px; margin: 6px 0; overflow-wrap: anywhere; }
+  .works .card-link { display: block; min-height: 34px; line-height: 17px; margin-top: auto; }
+}
